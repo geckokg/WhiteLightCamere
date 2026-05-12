@@ -353,7 +353,8 @@ module cam_python1300_top #(
                        {31'd0, fifo_overflow_sys2} + {31'd0, init_fault} + {31'd0, axi_error};
 
   assign status = {
-    2'd0,
+    1'b0,
+    power_clk_en,
     cam1_monitor1,
     cam1_monitor0,
     power_vdd_pix_en,

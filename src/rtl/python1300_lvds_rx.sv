@@ -34,16 +34,60 @@ module python1300_lvds_rx #(
   logic [WORD_BITS-1:0] sh_d3;
   logic [$clog2(WORD_BITS)-1:0] bit_count;
   logic [7:0] lock_count;
-  wire [WORD_BITS-1:0] next_sync = {sh_sync[WORD_BITS-2:0], lvds_sync_p};
-  wire [WORD_BITS-1:0] next_d0   = {sh_d0[WORD_BITS-2:0], lvds_data_p[0]};
-  wire [WORD_BITS-1:0] next_d1   = {sh_d1[WORD_BITS-2:0], lvds_data_p[1]};
-  wire [WORD_BITS-1:0] next_d2   = {sh_d2[WORD_BITS-2:0], lvds_data_p[2]};
-  wire [WORD_BITS-1:0] next_d3   = {sh_d3[WORD_BITS-2:0], lvds_data_p[3]};
+  logic lvds_clk_ibuf;
+  logic lvds_clk;
+  logic lvds_sync;
+  logic [3:0] lvds_data;
+  wire [WORD_BITS-1:0] next_sync = {sh_sync[WORD_BITS-2:0], lvds_sync};
+  wire [WORD_BITS-1:0] next_d0   = {sh_d0[WORD_BITS-2:0], lvds_data[0]};
+  wire [WORD_BITS-1:0] next_d1   = {sh_d1[WORD_BITS-2:0], lvds_data[1]};
+  wire [WORD_BITS-1:0] next_d2   = {sh_d2[WORD_BITS-2:0], lvds_data[2]};
+  wire [WORD_BITS-1:0] next_d3   = {sh_d3[WORD_BITS-2:0], lvds_data[3]};
   wire word_boundary = (bit_count == WORD_BITS-1) || (!align_locked && (next_sync == TRAINING));
 
-  assign word_clk = lvds_clk_p;
+  IBUFDS #(
+    .DIFF_TERM("FALSE"),
+    .IBUF_LOW_PWR("TRUE"),
+    .IOSTANDARD("LVDS")
+  ) lvds_clk_ibufds_i (
+    .I(lvds_clk_p),
+    .IB(lvds_clk_n),
+    .O(lvds_clk_ibuf)
+  );
 
-  always_ff @(posedge lvds_clk_p or negedge rst_n) begin
+  BUFG lvds_clk_bufg_i (
+    .I(lvds_clk_ibuf),
+    .O(lvds_clk)
+  );
+
+  IBUFDS #(
+    .DIFF_TERM("FALSE"),
+    .IBUF_LOW_PWR("TRUE"),
+    .IOSTANDARD("LVDS")
+  ) lvds_sync_ibufds_i (
+    .I(lvds_sync_p),
+    .IB(lvds_sync_n),
+    .O(lvds_sync)
+  );
+
+  genvar lane;
+  generate
+    for (lane = 0; lane < 4; lane = lane + 1) begin : gen_data_ibufds
+      IBUFDS #(
+        .DIFF_TERM("FALSE"),
+        .IBUF_LOW_PWR("TRUE"),
+        .IOSTANDARD("LVDS")
+      ) lvds_data_ibufds_i (
+        .I(lvds_data_p[lane]),
+        .IB(lvds_data_n[lane]),
+        .O(lvds_data[lane])
+      );
+    end
+  endgenerate
+
+  assign word_clk = lvds_clk;
+
+  always_ff @(posedge lvds_clk or negedge rst_n) begin
     if (!rst_n) begin
       sh_sync       <= '0;
       sh_d0         <= '0;
@@ -91,7 +135,4 @@ module python1300_lvds_rx #(
       end
     end
   end
-
-  // Keep negative pins referenced so lint tools do not mark them accidental.
-  wire unused_lvds_n = lvds_clk_n ^ ^lvds_data_n ^ lvds_sync_n;
 endmodule

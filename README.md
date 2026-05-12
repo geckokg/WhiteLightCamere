@@ -95,6 +95,21 @@ To build from the regenerated `.xpr` in batch mode, use:
 .\scripts\build_vivado_project_bitstream.ps1
 ```
 
+For safer board bring-up with an ILA probe instead of touching dense camera pins with a meter:
+
+```powershell
+.\scripts\build_ila_pin_bringup_bitstream.ps1
+```
+
+This writes:
+
+```text
+D:\ZYNQ\WhiteLightCamere\out\ila_pin_bringup\sei_pin_cam_a_top_ila.bit
+D:\ZYNQ\WhiteLightCamere\out\ila_pin_bringup\sei_pin_cam_a_top_ila.ltx
+```
+
+See `docs/ila_probe_map.md` for the probe bit map and suggested triggers.
+
 Current simulation coverage:
 
 - `tb_power_seq` checks sensor rail/clock/reset sequencing.

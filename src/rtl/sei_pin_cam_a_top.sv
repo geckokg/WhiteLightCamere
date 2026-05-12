@@ -52,6 +52,7 @@ module sei_pin_cam_a_top (
   logic [31:0] frame_count;
   logic [31:0] error_count;
   logic [31:0] accepted_burst_count;
+  (* keep = "true", mark_debug = "true" *) logic [127:0] dbg_sys_bus;
 
   clk_mmcm_100_to_72 clkgen_i (
     .clk_100m_p(sys_clk_p),
@@ -143,6 +144,30 @@ module sei_pin_cam_a_top (
     .s_axi_bready(m_axi_bready),
     .accepted_burst_count(accepted_burst_count)
   );
+
+  always_comb begin
+    dbg_sys_bus = '0;
+    dbg_sys_bus[0]      = clk_locked;
+    dbg_sys_bus[1]      = sys_rst_n;
+    dbg_sys_bus[2]      = camera_vdd_18_en;
+    dbg_sys_bus[3]      = camera_vdd_33_en;
+    dbg_sys_bus[4]      = status[27]; // Internal pixel/analog rail enable state.
+    dbg_sys_bus[5]      = camera_reset_n;
+    dbg_sys_bus[6]      = status[30];
+    dbg_sys_bus[7]      = trigger_0;
+    dbg_sys_bus[8]      = spi_sck;
+    dbg_sys_bus[9]      = spi_ss_n;
+    dbg_sys_bus[10]     = spi_mosi;
+    dbg_sys_bus[11]     = spi_miso;
+    dbg_sys_bus[12]     = status[0];
+    dbg_sys_bus[13]     = status[1];
+    dbg_sys_bus[14]     = status[2];
+    dbg_sys_bus[15]     = status[3];
+    dbg_sys_bus[23:16]  = status[16:9];
+    dbg_sys_bus[31:24]  = status[24:17];
+    dbg_sys_bus[32]     = status[27];
+    dbg_sys_bus[33]     = status[30];
+  end
 
   wire unused_debug = ^status ^ ^frame_count ^ ^error_count ^ ^accepted_burst_count;
 endmodule
