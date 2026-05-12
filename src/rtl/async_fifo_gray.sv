@@ -14,62 +14,62 @@ module async_fifo_gray #(
   output logic [DATA_WIDTH-1:0] rd_data,
   output logic empty
 );
-  localparam int DEPTH = 1 << ADDR_WIDTH;
+  localparam int FIFO_DEPTH = 1 << ADDR_WIDTH;
 
-  logic [DATA_WIDTH-1:0] mem [0:DEPTH-1];
-  logic [ADDR_WIDTH:0] wr_bin;
-  logic [ADDR_WIDTH:0] rd_bin;
-  logic [ADDR_WIDTH:0] wr_gray;
-  logic [ADDR_WIDTH:0] rd_gray;
-  logic [ADDR_WIDTH:0] wr_gray_rdclk_1;
-  logic [ADDR_WIDTH:0] wr_gray_rdclk_2;
-  logic [ADDR_WIDTH:0] rd_gray_wrclk_1;
-  logic [ADDR_WIDTH:0] rd_gray_wrclk_2;
+  logic rst;
+  logic wr_rst_busy;
+  logic rd_rst_busy;
 
-  function automatic logic [ADDR_WIDTH:0] bin2gray(input logic [ADDR_WIDTH:0] bin);
-    bin2gray = (bin >> 1) ^ bin;
-  endfunction
+  assign rst = ~(wr_rst_n & rd_rst_n);
 
-  wire [ADDR_WIDTH:0] wr_bin_next  = wr_bin + ((wr_en && !full) ? 1'b1 : 1'b0);
-  wire [ADDR_WIDTH:0] wr_gray_next = bin2gray(wr_bin_next);
-  wire [ADDR_WIDTH:0] rd_bin_next  = rd_bin + ((rd_en && !empty) ? 1'b1 : 1'b0);
-  wire [ADDR_WIDTH:0] rd_gray_next = bin2gray(rd_bin_next);
+  xpm_fifo_async #(
+    .CASCADE_HEIGHT(0),
+    .CDC_SYNC_STAGES(2),
+    .DOUT_RESET_VALUE("0"),
+    .ECC_MODE("no_ecc"),
+    .FIFO_MEMORY_TYPE("auto"),
+    .FIFO_READ_LATENCY(0),
+    .FIFO_WRITE_DEPTH(FIFO_DEPTH),
+    .FULL_RESET_VALUE(0),
+    .PROG_EMPTY_THRESH(10),
+    .PROG_FULL_THRESH(FIFO_DEPTH - 10),
+    .RD_DATA_COUNT_WIDTH(ADDR_WIDTH + 1),
+    .READ_DATA_WIDTH(DATA_WIDTH),
+    .READ_MODE("fwft"),
+    .RELATED_CLOCKS(0),
+    .SIM_ASSERT_CHK(0),
+    .USE_ADV_FEATURES("0000"),
+    .WAKEUP_TIME(0),
+    .WRITE_DATA_WIDTH(DATA_WIDTH),
+    .WR_DATA_COUNT_WIDTH(ADDR_WIDTH + 1)
+  ) xpm_fifo_async_i (
+    .almost_empty(),
+    .almost_full(),
+    .data_valid(),
+    .dbiterr(),
+    .dout(rd_data),
+    .empty(empty),
+    .full(full),
+    .overflow(),
+    .prog_empty(),
+    .prog_full(),
+    .rd_data_count(),
+    .rd_rst_busy(rd_rst_busy),
+    .sbiterr(),
+    .underflow(),
+    .wr_ack(),
+    .wr_data_count(),
+    .wr_rst_busy(wr_rst_busy),
+    .din(wr_data),
+    .injectdbiterr(1'b0),
+    .injectsbiterr(1'b0),
+    .rd_clk(rd_clk),
+    .rd_en(rd_en),
+    .rst(rst),
+    .sleep(1'b0),
+    .wr_clk(wr_clk),
+    .wr_en(wr_en)
+  );
 
-  assign full  = (wr_gray_next == {~rd_gray_wrclk_2[ADDR_WIDTH:ADDR_WIDTH-1], rd_gray_wrclk_2[ADDR_WIDTH-2:0]});
-  assign empty = (rd_gray == wr_gray_rdclk_2);
-
-  always_ff @(posedge wr_clk or negedge wr_rst_n) begin
-    if (!wr_rst_n) begin
-      wr_bin          <= '0;
-      wr_gray         <= '0;
-      rd_gray_wrclk_1 <= '0;
-      rd_gray_wrclk_2 <= '0;
-    end else begin
-      rd_gray_wrclk_1 <= rd_gray;
-      rd_gray_wrclk_2 <= rd_gray_wrclk_1;
-      if (wr_en && !full) begin
-        mem[wr_bin[ADDR_WIDTH-1:0]] <= wr_data;
-        wr_bin  <= wr_bin_next;
-        wr_gray <= wr_gray_next;
-      end
-    end
-  end
-
-  always_ff @(posedge rd_clk or negedge rd_rst_n) begin
-    if (!rd_rst_n) begin
-      rd_bin          <= '0;
-      rd_gray         <= '0;
-      wr_gray_rdclk_1 <= '0;
-      wr_gray_rdclk_2 <= '0;
-      rd_data         <= '0;
-    end else begin
-      wr_gray_rdclk_1 <= wr_gray;
-      wr_gray_rdclk_2 <= wr_gray_rdclk_1;
-      rd_data <= mem[rd_bin[ADDR_WIDTH-1:0]];
-      if (rd_en && !empty) begin
-        rd_bin  <= rd_bin_next;
-        rd_gray <= rd_gray_next;
-      end
-    end
-  end
+  wire unused_busy = wr_rst_busy ^ rd_rst_busy;
 endmodule

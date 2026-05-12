@@ -1,5 +1,6 @@
 # Vivado generated project/output directories.
 /vivado/
+/.Xil/
 
 # Common Vivado side products.
 *.jou

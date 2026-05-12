@@ -1,4 +1,5 @@
 src/rtl/python1300_pkg.sv
+src/rtl/clk_mmcm_100_to_72.sv
 src/rtl/cam_power_seq.sv
 src/rtl/python1300_spi_master.sv
 src/rtl/python1300_init_rom.sv
@@ -8,4 +9,6 @@ src/rtl/python1300_frame_parser.sv
 src/rtl/python1300_kernel_reorder.sv
 src/rtl/async_fifo_gray.sv
 src/rtl/axi_frame_writer.sv
+src/rtl/axi_write_sink.sv
 src/rtl/cam_python1300_top.sv
+src/rtl/sei_pin_cam_a_top.sv

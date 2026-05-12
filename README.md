@@ -22,6 +22,7 @@ The implemented target is:
 - `constraints/` - commented J31 constraint template
 - `scripts/create_vivado_project.tcl` - creates a Vivado project shell
 - `scripts/create_vivado_project.ps1` - runs Vivado 2024.2 from `D:\Xilinx\Vivado\2024.2`
+- `scripts/extract_sei_cam_a_xdc.py` - extracts CAM A constraints from `D:\ZYNQ\lasercom\lasercom_top\Sei_Pin.xdc`
 - `scripts/raw16_to_pgm.py` - converts a raw DDR frame dump to PGM
 - `tb/` - small simulation benches for power sequencing and frame parsing
 - `docs/` - hardware preflight and bring-up notes
@@ -52,11 +53,18 @@ The generated Vivado project is placed under:
 D:\ZYNQ\WhiteLightCamere\vivado\python1300_cam
 ```
 
-Then create/connect a block design with:
+The default Vivado top is `sei_pin_cam_a_top`, which matches the CAM A port names in `Sei_Pin.xdc`.
+It is a pin-level bring-up top: it generates the 72 MHz camera clock from the 100 MHz board clock and uses an internal AXI sink so no DDR pins are exposed.
+
+For a quick Vivado RTL elaboration check:
+
+```powershell
+.\scripts\check_vivado_elab.ps1
+```
+
+For real DDR frame capture, keep using `cam_python1300_top` inside a Zynq MPSoC block design and connect its AXI master to a PS HP/HPC DDR port:
 
 - Zynq UltraScale+ MPSoC
 - PL clock for `sys_clk`, default 100 MHz
 - Clocking Wizard output for `cam_ref_clk_72m`
 - AXI HP/HPC path from `cam_python1300_top` to DDR
-
-Do not uncomment the XDC package pins until you verify them against the board.

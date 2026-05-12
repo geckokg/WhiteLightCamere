@@ -3,12 +3,8 @@ $ErrorActionPreference = "Stop"
 $VivadoBat = "D:\Xilinx\Vivado\2024.2\bin\vivado.bat"
 $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $RootDir = Resolve-Path (Join-Path $ScriptDir "..")
-$TclScript = Join-Path $ScriptDir "create_vivado_project.tcl"
 $ExtractXdcScript = Join-Path $ScriptDir "extract_sei_cam_a_xdc.py"
-
-if (!(Test-Path $VivadoBat)) {
-    throw "Vivado was not found at $VivadoBat"
-}
+$TclScript = Join-Path $ScriptDir "check_vivado_elab.tcl"
 
 Push-Location $RootDir
 try {
