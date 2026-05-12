@@ -3,7 +3,7 @@ set root_dir [file normalize [file join $script_dir ".."]]
 set proj_dir [file join $root_dir "vivado" "python1300_cam"]
 
 create_project python1300_cam $proj_dir -part xczu3eg-sfvc784-1-i -force
-set_property target_language SystemVerilog [current_project]
+set_property target_language Verilog [current_project]
 set_property simulator_language Mixed [current_project]
 
 set rtl_files {

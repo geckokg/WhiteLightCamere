@@ -2,6 +2,12 @@
 
 This workspace contains a first-pass PL driver scaffold for an onsemi PYTHON 1300 / `NOIP1SN1300A` camera on `xczu3eg-sfvc784-1-i`.
 
+Canonical local workspace:
+
+```text
+D:\ZYNQ\WhiteLightCamere
+```
+
 The implemented target is:
 
 - P1 LVDS output, 4 data lanes + sync + clock
@@ -15,6 +21,7 @@ The implemented target is:
 - `src/rtl/` - SystemVerilog RTL
 - `constraints/` - commented J31 constraint template
 - `scripts/create_vivado_project.tcl` - creates a Vivado project shell
+- `scripts/create_vivado_project.ps1` - runs Vivado 2024.2 from `D:\Xilinx\Vivado\2024.2`
 - `scripts/raw16_to_pgm.py` - converts a raw DDR frame dump to PGM
 - `tb/` - small simulation benches for power sequencing and frame parsing
 - `docs/` - hardware preflight and bring-up notes
@@ -27,10 +34,22 @@ The LVDS receiver module is intentionally a stable interface wrapper. For real 7
 
 ## Vivado Start
 
-From Vivado Tcl:
+From PowerShell in the workspace:
+
+```powershell
+.\scripts\create_vivado_project.ps1
+```
+
+Or from Vivado Tcl:
 
 ```tcl
 source scripts/create_vivado_project.tcl
+```
+
+The generated Vivado project is placed under:
+
+```text
+D:\ZYNQ\WhiteLightCamere\vivado\python1300_cam
 ```
 
 Then create/connect a block design with:

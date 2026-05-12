@@ -1,0 +1,17 @@
+# Vivado generated project/output directories.
+/vivado/
+
+# Common Vivado side products.
+*.jou
+*.log
+*.str
+*.wdb
+*.pb
+*.rpt
+*.dcp
+*.bit
+*.ltx
+
+# Python local cache.
+__pycache__/
+*.pyc

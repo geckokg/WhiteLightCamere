@@ -4,3 +4,5 @@
 - If a GitHub remote is configured, push the commit after it is created.
 - If no GitHub remote is configured, keep the local commit and tell the user that the remote repository is still missing.
 - Do not create a public GitHub repository without explicit user confirmation.
+- Use `D:\ZYNQ\WhiteLightCamere` as the canonical local project workspace.
+- Use `D:\Xilinx\Vivado\2024.2\bin\vivado.bat` when invoking Vivado from scripts.
