@@ -1,3 +1,5 @@
+`timescale 1ns/1ps
+
 module axi_frame_writer #(
   parameter int ADDR_WIDTH       = 32,
   parameter int DATA_WIDTH       = 64,

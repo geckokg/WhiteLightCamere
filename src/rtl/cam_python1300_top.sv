@@ -1,3 +1,5 @@
+`timescale 1ns/1ps
+
 module cam_python1300_top #(
   parameter int SYS_CLK_HZ             = 100_000_000,
   parameter int SPI_HZ                 = 2_000_000,

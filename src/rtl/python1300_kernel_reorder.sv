@@ -1,3 +1,5 @@
+`timescale 1ns/1ps
+
 module python1300_kernel_reorder (
   input  logic clk,
   input  logic rst_n,

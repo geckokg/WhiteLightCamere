@@ -1,3 +1,5 @@
+`timescale 1ns/1ps
+
 module python1300_lvds_rx #(
   parameter int WORD_BITS = 10
 ) (

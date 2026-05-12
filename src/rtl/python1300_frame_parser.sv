@@ -1,3 +1,5 @@
+`timescale 1ns/1ps
+
 module python1300_frame_parser (
   input  logic clk,
   input  logic rst_n,

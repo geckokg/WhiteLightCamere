@@ -1,3 +1,5 @@
+`timescale 1ns/1ps
+
 module clk_mmcm_100_to_72 (
   input  logic clk_100m_p,
   input  logic clk_100m_n,

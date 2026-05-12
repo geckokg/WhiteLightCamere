@@ -1,3 +1,5 @@
+`timescale 1ns/1ps
+
 module async_fifo_gray #(
   parameter int DATA_WIDTH = 66,
   parameter int ADDR_WIDTH = 10

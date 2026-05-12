@@ -1,3 +1,5 @@
+`timescale 1ns/1ps
+
 module sei_pin_cam_a_top (
   input  logic sys_clk_p,
   input  logic sys_clk_n,

@@ -104,8 +104,13 @@ module tb_frame_path;
   endfunction
 
   task automatic expect_beat(input logic expected_sof, input logic [63:0] expected_data);
+    int wait_count;
     begin
-      @(posedge clk);
+      wait_count = 0;
+      while (!pix_valid && wait_count < 16) begin
+        @(posedge clk);
+        wait_count++;
+      end
       if (!pix_valid) begin
         $fatal(1, "expected pix_valid");
       end
@@ -115,6 +120,7 @@ module tb_frame_path;
       if (pix_data !== expected_data) begin
         $fatal(1, "pixel data mismatch: got %h expected %h", pix_data, expected_data);
       end
+      @(posedge clk);
     end
   endtask
 

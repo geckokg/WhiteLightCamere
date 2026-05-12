@@ -1,3 +1,5 @@
+`timescale 1ns/1ps
+
 module python1300_init_rom (
   input  logic [7:0] index,
   output logic [2:0] op,

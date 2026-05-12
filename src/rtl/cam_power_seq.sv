@@ -1,3 +1,5 @@
+`timescale 1ns/1ps
+
 module cam_power_seq #(
   parameter int SYS_CLK_HZ        = 100_000_000,
   parameter int POWER_STEP_US     = 100,

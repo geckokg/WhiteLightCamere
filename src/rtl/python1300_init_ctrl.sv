@@ -1,3 +1,5 @@
+`timescale 1ns/1ps
+
 module python1300_init_ctrl #(
   parameter int SYS_CLK_HZ      = 100_000_000,
   parameter int POLL_TIMEOUT_US = 100_000

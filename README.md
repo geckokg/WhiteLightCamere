@@ -23,6 +23,7 @@ The implemented target is:
 - `scripts/create_vivado_project.tcl` - creates a Vivado project shell
 - `scripts/create_vivado_project.ps1` - runs Vivado 2024.2 from `D:\Xilinx\Vivado\2024.2`
 - `scripts/extract_sei_cam_a_xdc.py` - extracts CAM A constraints from `D:\ZYNQ\lasercom\lasercom_top\Sei_Pin.xdc`
+- `scripts/run_xsim_tests.ps1` - runs the current Vivado xsim RTL testbenches
 - `scripts/raw16_to_pgm.py` - converts a raw DDR frame dump to PGM
 - `tb/` - small simulation benches for power sequencing and frame parsing
 - `docs/` - hardware preflight and bring-up notes
@@ -61,6 +62,17 @@ For a quick Vivado RTL elaboration check:
 ```powershell
 .\scripts\check_vivado_elab.ps1
 ```
+
+For RTL simulation:
+
+```powershell
+.\scripts\run_xsim_tests.ps1
+```
+
+Current simulation coverage:
+
+- `tb_power_seq` checks sensor rail/clock/reset sequencing.
+- `tb_frame_path` checks sync-code parsing and 4-lane kernel pixel reorder.
 
 For real DDR frame capture, keep using `cam_python1300_top` inside a Zynq MPSoC block design and connect its AXI master to a PS HP/HPC DDR port:
 

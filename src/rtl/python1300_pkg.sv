@@ -1,3 +1,5 @@
+`timescale 1ns/1ps
+
 package python1300_pkg;
   localparam int PY1300_SPI_ADDR_W = 9;
   localparam int PY1300_SPI_DATA_W = 16;
