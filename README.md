@@ -69,6 +69,18 @@ For RTL simulation:
 .\scripts\run_xsim_tests.ps1
 ```
 
+To generate the current CAM A pin-level bring-up bitstream without relying on the GUI project's selected top module:
+
+```powershell
+.\scripts\build_pin_bringup_bitstream.ps1
+```
+
+The bitstream is written to:
+
+```text
+D:\ZYNQ\WhiteLightCamere\out\pin_bringup\sei_pin_cam_a_top.bit
+```
+
 Current simulation coverage:
 
 - `tb_power_seq` checks sensor rail/clock/reset sequencing.

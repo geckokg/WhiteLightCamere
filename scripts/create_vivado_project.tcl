@@ -28,8 +28,11 @@ foreach f $rtl_files {
 }
 
 add_files -fileset constrs_1 -norecurse [file join $root_dir "constraints" "sei_pin_cam_a.generated.xdc"]
-set_property top sei_pin_cam_a_top [current_fileset]
+set_property top sei_pin_cam_a_top [get_filesets sources_1]
+set_property top_file [file join $root_dir "src" "rtl" "sei_pin_cam_a_top.sv"] [get_filesets sources_1]
 update_compile_order -fileset sources_1
+set_property top sei_pin_cam_a_top [get_filesets sources_1]
+set_property STEPS.SYNTH_DESIGN.ARGS.TOP sei_pin_cam_a_top [get_runs synth_1]
 
 puts "Created Vivado project at $proj_dir"
 puts "Top is sei_pin_cam_a_top, using CAM A pins generated from D:/ZYNQ/lasercom/lasercom_top/Sei_Pin.xdc."
