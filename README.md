@@ -81,6 +81,20 @@ The bitstream is written to:
 D:\ZYNQ\WhiteLightCamere\out\pin_bringup\sei_pin_cam_a_top.bit
 ```
 
+If the Vivado GUI project still reports hundreds of unconstrained `cam1_*`, `m_axi_*`, or `status` ports, the GUI project is still using the internal `cam_python1300_top` as its top module. Repair that project with:
+
+```powershell
+.\scripts\repair_vivado_project_top.ps1
+```
+
+Then reset `synth_1` and `impl_1` before rebuilding in the GUI.
+
+To build from the regenerated `.xpr` in batch mode, use:
+
+```powershell
+.\scripts\build_vivado_project_bitstream.ps1
+```
+
 Current simulation coverage:
 
 - `tb_power_seq` checks sensor rail/clock/reset sequencing.

@@ -5,6 +5,8 @@ set proj_dir [file join $root_dir "vivado" "python1300_cam"]
 create_project python1300_cam $proj_dir -part xczu3eg-sfvc784-1-i -force
 set_property target_language Verilog [current_project]
 set_property simulator_language Mixed [current_project]
+set_property source_mgmt_mode None [current_project]
+set_property XPM_LIBRARIES {XPM_CDC XPM_FIFO XPM_MEMORY} [current_project]
 
 set rtl_files {
   src/rtl/python1300_pkg.sv
@@ -32,7 +34,7 @@ set_property top sei_pin_cam_a_top [get_filesets sources_1]
 set_property top_file [file join $root_dir "src" "rtl" "sei_pin_cam_a_top.sv"] [get_filesets sources_1]
 update_compile_order -fileset sources_1
 set_property top sei_pin_cam_a_top [get_filesets sources_1]
-set_property STEPS.SYNTH_DESIGN.ARGS.TOP sei_pin_cam_a_top [get_runs synth_1]
+set_property top_auto_set 0 [get_filesets sources_1]
 
 puts "Created Vivado project at $proj_dir"
 puts "Top is sei_pin_cam_a_top, using CAM A pins generated from D:/ZYNQ/lasercom/lasercom_top/Sei_Pin.xdc."
